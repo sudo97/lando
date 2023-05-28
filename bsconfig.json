@@ -1,0 +1,14 @@
+{
+  "name": "lando-project",
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": ["@rescript/core", "rescript-express"],
+  "bsc-flags": ["-open RescriptCore"]
+}
