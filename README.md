@@ -1,6 +1,6 @@
-# ReScript Project Template
+# Lando Droid module
 
-The only official ReScript starter template.
+This is a test project
 
 ## Installation
 
@@ -13,9 +13,11 @@ npm install
 - Build: `npm run res:build`
 - Clean: `npm run res:clean`
 - Build & watch: `npm run res:dev`
+- Test: `npm run test`
 
 ## Run
 
+This will start a server at port 8888 
 ```sh
-node src/Demo.bs.js
+npm run start
 ```
