@@ -22,7 +22,7 @@ let cmpMech = (a: Types.scan, b: Types.scan): int => Fn.on(({enemies}: Types.sca
     }
   , cmp, a, b)
 
-let cmpTargers = (protocols: array<Types.protocol>, a: Types.scan, b: Types.scan): int =>
+let cmpTargets = (protocols: array<Types.protocol>, a: Types.scan, b: Types.scan): int =>
   protocols->Js.Array2.reduce((score, p) =>
     score +
     switch p {
@@ -42,7 +42,7 @@ let computeNextTarget = (inp: Types.t): option<Types.coords> =>
     } else {
       switch best {
       | None => Some(current)
-      | Some(best') if cmpTargers(inp.protocols, best', current) > 0 => best
+      | Some(best') if cmpTargets(inp.protocols, best', current) > 0 => best
       | _ => Some(current)
       }
     }

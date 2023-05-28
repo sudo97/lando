@@ -55,7 +55,7 @@ let parseEnemy = (json: Js.Json.t): parseResult<Types.enemy> =>
     switch s {
     | "soldier" => Ok(#soldier)
     | "mech" => Ok(#mech)
-    | _ => Error("unknown enemy type")
+    | _ => Error(`unknown enemy type: ${s}`)
     }
   | _ => Error("enemy is not a string")
   }
@@ -100,13 +100,21 @@ let parseScanArr = (json: Js.Json.t): parseResult<array<Types.scan>> =>
   | _ => Error("scans is not an array")
   }
 
-let parseInp = (s: string): parseResult<Types.t> =>
-  switch s->Js.Json.parseExn->Js.Json.classify {
-  | JSONObject(obj) => {
-      open ParseResult
-      pure(Types.make)
-      ->apply(obj->getField("protocols")->Result.flatMap(parseProtocolsArr))
-      ->apply(obj->getField("scan")->Result.flatMap(parseScanArr))
-    }
-  | _ => Error("input is not an object")
+let parseInp = (s: string): parseResult<Types.t> => {
+  let data = try Ok(s->Js.Json.parseExn) catch {
+  | _ => Error("invalid json")
   }
+  switch data {
+  | Error(e) => Error(e)
+  | Ok(obj) =>
+    switch obj->Js.Json.classify {
+    | JSONObject(obj) => {
+        open ParseResult
+        pure(Types.make)
+        ->apply(obj->getField("protocols")->Result.flatMap(parseProtocolsArr))
+        ->apply(obj->getField("scan")->Result.flatMap(parseScanArr))
+      }
+    | _ => Error("input is not an object")
+    }
+  }
+}
