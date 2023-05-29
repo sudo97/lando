@@ -2,10 +2,7 @@ open Express
 
 let app = expressCjs()
 
-type textMiddlewareParams = {"type": array<string>}
-
-@module("express") external textMiddleware: textMiddlewareParams => middleware = "text"
-app->use(textMiddleware({"type": ["text/*", "application/json"]}))
+app->use(textMiddlewareWithOptions({"type": ["text/*", "application/json"]}))
 
 app->post("/radar", (req, res) => {
   let body = req->body
