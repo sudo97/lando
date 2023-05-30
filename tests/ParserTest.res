@@ -16,9 +16,9 @@ let defaultAssert = (x, y, ~operator, ~message) => {
 }
 
 testWithCoords("getField", ((input, output)) => {
-  let happyOutput = output.x->Js.Json.number
+  let happyOutput = output.x
 
-  let result = input->ParseInput.getField("x")
+  let result = input->JsonParser.field("x", JsonParser.number)
 
   defaultAssert(
     result,
@@ -27,7 +27,7 @@ testWithCoords("getField", ((input, output)) => {
     ~message="Get field should return Ok(field)",
   )
 
-  let sadResult = input->ParseInput.getField("z")
+  let sadResult = input->JsonParser.field("z", JsonParser.number)
 
   defaultAssert(
     sadResult,
@@ -51,7 +51,7 @@ testWithCoords("Parse coordinates", ((o, output)) => {
 
   defaultAssert(
     sadResult,
-    Error("Coords is not an object"),
+    Error("not an object"),
     ~operator="parseCoords",
     ~message="Parse coordinates should return Error(message)",
   )
@@ -96,7 +96,7 @@ test("parseProtocol", () => {
 
 test("parse enemy type", () => {
   let happyInputs =
-    ["soldier", "mech"]->Js.Array2.map(s => s->Js.Json.string->ParseInput.parseEnemy)
+    ["soldier", "mech"]->Js.Array2.map(s => s->Js.Json.string->ParseInput.parseEnemyType)
 
   let happyOutputs: array<result<Types.enemy, string>> = [Ok(#soldier), Ok(#mech)]
 
@@ -107,7 +107,7 @@ test("parse enemy type", () => {
     ~message="Parse enemy should return Ok(enemy)",
   )
 
-  let sadResult = ParseInput.parseEnemy(Js.Json.string("stormtrooper"))
+  let sadResult = ParseInput.parseEnemyType(Js.Json.string("stormtrooper"))
 
   defaultAssert(
     sadResult,
@@ -186,7 +186,7 @@ test("paseInput", () => {
   let s = `{"protocols":["avoid-mech"],"scan":[{"coordinates":{"x":0,"y":40},"enemies":{"type":"soldier","number":10}},{"coordinates":{"x":0,"y":80},"allies":5,"enemies":{"type":"mech","number":1}}]}`
 
   defaultAssert(
-    ParseInput.parseInp(s),
+    ParseInput.parse(s),
     Ok({
       protocols: [#"avoid-mech"],
       scan: [

@@ -3,7 +3,7 @@ open Test
 let {defaultAssert} = module(ParserTest)
 
 test("Applicative", () => {
-  open ParseInput.ParseResult
+  open JsonParser
   defaultAssert(
     pure("a"),
     Ok("a"),
@@ -90,7 +90,7 @@ test("computeNextTarget", () => {
       `{"x":11,"y":58}`,
     ),
   ]->Js.Array2.forEach(((inp, outp)) => {
-    let parsedInp = inp->ParseInput.parseInp->Result.map(ComputeNextTarget.computeNextTarget)
+    let parsedInp = inp->ParseInput.parse->Result.map(ComputeNextTarget.computeNextTarget)
     let parsedOutp =
       outp->Js.Json.parseExn->ParseInput.parseCoords->Result.map(coords => Some(coords))
     defaultAssert(

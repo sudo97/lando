@@ -6,7 +6,7 @@ app->use(textMiddlewareWithOptions({"type": ["text/*", "application/json"]}))
 
 app->post("/radar", (req, res) => {
   let body = req->body
-  let inp = ParseInput.parseInp(body)
+  let inp = ParseInput.parse(body)
   let _ = switch inp {
   | Ok(i) => res->status(200)->json(ComputeNextTarget.computeNextTarget(i))
   | Error(s) => res->status(400)->json({"error": `Unable to parse input, ${s}`})
