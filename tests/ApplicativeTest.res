@@ -29,9 +29,9 @@ test("Applicative", () => {
 
   defaultAssert(
     [Ok(1), Error("error"), Ok(3)]->sequence,
-    Error("error"),
+    Error("Error `error` at index 1"),
     ~operator="sequence",
-    ~message="sequence should return Error(error) if any element is Error",
+    ~message="sequence should return Error(error at index n) if any element is Error",
   )
 })
 

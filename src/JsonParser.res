@@ -10,14 +10,14 @@ let apply = (f, x) =>
   }
 
 let sequence = (xs: array<result<'a, string>>): result<array<'a>, string> =>
-  xs->Js.Array2.reduce((acc, curr) =>
+  xs->Js.Array2.reducei((acc, curr, i) =>
     switch (acc, curr) {
     | (Ok(acc), Ok(curr)) => {
         acc->Js.Array2.push(curr)->ignore
         Ok(acc)
       }
     | (Error(e), _) => Error(e)
-    | (_, Error(e)) => Error(e)
+    | (_, Error(e)) => Error(`Error \`${e}\` at index ${i->Int.toString}`)
     }
   , Ok([]))
 
