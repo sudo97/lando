@@ -74,7 +74,7 @@ let field = (obj: Js.Dict.t<Js.Json.t>, key: string, p: Js.Json.t => t<'a>): t<'
   | Some(value) =>
     switch Ok(value)->flatMap(p) {
     | Ok(x) => Ok(x)
-    | Error(e) => Error(`field "${key}" ${e}`)
+    | Error(e) => Error(`field "${key}": ${e}`)
     }
   | None => Error(`missing field "${key}"`)
   }
