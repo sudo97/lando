@@ -11,7 +11,11 @@ let apply = (f, x) =>
 
 let or = (p1, p2, json) =>
   switch p1(json) {
-  | Error(_) => p2(json)
+  | Error(e) =>
+    switch p2(json) {
+    | Error(e2) => Error(`Error \`${e}\` or \`${e2}\``)
+    | x => x
+    }
   | x => x
   }
 
