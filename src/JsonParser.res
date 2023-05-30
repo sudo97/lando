@@ -9,6 +9,12 @@ let apply = (f, x) =>
   | (_, Error(e)) => Error(e)
   }
 
+let or = (p1, p2, json) =>
+  switch p1(json) {
+  | Error(_) => p2(json)
+  | x => x
+  }
+
 let sequence = (xs: array<result<'a, string>>): result<array<'a>, string> =>
   xs->Js.Array2.reducei((acc, curr, i) =>
     switch (acc, curr) {
