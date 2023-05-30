@@ -67,7 +67,7 @@ let object = (json: Js.Json.t): t<Js.Dict.t<Js.Json.t>> =>
   }
 
 let withObject = (p: Js.Dict.t<Js.Json.t> => t<'a>, json: Js.Json.t): t<'a> =>
-  json->object->flatMap(o => p(o))
+  json->object->flatMap(p)
 
 let field = (obj: Js.Dict.t<Js.Json.t>, key: string, p: Js.Json.t => t<'a>): t<'a> =>
   switch Js.Dict.get(obj, key) {
