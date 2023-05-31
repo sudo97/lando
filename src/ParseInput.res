@@ -1,16 +1,16 @@
 open JsonParser
 
-let parseInt = withNumber(v =>
+let parseInt = with(number)(v =>
   try Ok(Int.fromFloat(v)) catch {
   | _ => Error("not an int")
   }
 )
 
-let parseCoords = withObject(obj =>
+let parseCoords = with(object)(obj =>
   pure(Types.coords)->apply(obj->field("x", number))->apply(obj->field("y", number))
 )
 
-let parseProtocol = withString(s =>
+let parseProtocol = with(string)(s =>
   switch s {
   | "closest-enemies" => Ok(#"closest-enemies")
   | "furthest-enemies" => Ok(#"furthest-enemies")
@@ -22,7 +22,7 @@ let parseProtocol = withString(s =>
   }
 )
 
-let parseEnemyType = withString(s =>
+let parseEnemyType = with(string)(s =>
   switch s {
   | "soldier" => Ok(#soldier)
   | "mech" => Ok(#mech)
@@ -30,20 +30,20 @@ let parseEnemyType = withString(s =>
   }
 )
 
-let parseEnemies = withObject(obj =>
+let parseEnemies = with(object)(obj =>
   pure(Types.enemies)
   ->apply(obj->field("type", parseEnemyType))
   ->apply(obj->field("number", parseInt))
 )
 
-let parseScan = withObject(obj =>
+let parseScan = with(object)(obj =>
   pure(Types.scan)
   ->apply(obj->field("coordinates", parseCoords))
   ->apply(obj->field("enemies", parseEnemies))
   ->apply(obj->optional("allies", parseInt))
 )
 
-let parseInp = withObject(obj =>
+let parseInp = with(object)(obj =>
   pure(Types.make)
   ->apply(obj->field("protocols", array(parseProtocol)))
   ->apply(obj->field("scan", array(parseScan)))

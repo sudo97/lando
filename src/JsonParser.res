@@ -41,15 +41,11 @@ let number = (json: Js.Json.t): t<float> =>
   | _ => Error("not a number")
   }
 
-let withNumber = (p: float => t<'a>, json: Js.Json.t): t<'a> => json->number->flatMap(p)
-
 let string = (json: Js.Json.t): t<string> =>
   switch Js.Json.classify(json) {
   | Js.Json.JSONString(s) => Ok(s)
   | _ => Error("not a string")
   }
-
-let withString = (p: string => t<'a>, json: Js.Json.t): t<'a> => json->string->flatMap(p)
 
 let boolean = (json: Js.Json.t): t<bool> =>
   switch Js.Json.classify(json) {
@@ -57,6 +53,8 @@ let boolean = (json: Js.Json.t): t<bool> =>
   | Js.Json.JSONTrue => Ok(true)
   | _ => Error("not a boolean")
   }
+
+let with = (a, b, json) => json->a->flatMap(b)
 
 let array = (p: Js.Json.t => t<'a>, json: Js.Json.t): t<array<'a>> =>
   switch Js.Json.classify(json) {
@@ -75,9 +73,6 @@ let object = (json: Js.Json.t): t<Js.Dict.t<Js.Json.t>> =>
   | Js.Json.JSONObject(o) => Ok(o)
   | _ => Error("not an object")
   }
-
-let withObject = (p: Js.Dict.t<Js.Json.t> => t<'a>, json: Js.Json.t): t<'a> =>
-  json->object->flatMap(p)
 
 let field = (obj: Js.Dict.t<Js.Json.t>, key: string, p: Js.Json.t => t<'a>): t<'a> =>
   switch Js.Dict.get(obj, key) {
